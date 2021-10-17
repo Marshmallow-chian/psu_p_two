@@ -34,7 +34,7 @@ async def products_2(item_id: int):
     return product
 
 
-@app.post("/api/products/item_id/{item_id}/name/{name}/description/{description}/price/{price}")
+@app.post("/api/products/item_id/{item_id}")
 async def products_new(item_id: int, name: str, description: str, price: float):
     global products_sp
     product = {'item_id': item_id,
