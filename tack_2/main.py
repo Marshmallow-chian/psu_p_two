@@ -38,7 +38,7 @@ async def products_2(item_id: int):
 
 
 
-@app.post("/api/products/item_id/{item_id}")   # -
+@app.post("/api/products/new/item_id/{item_id}")   # -
 async def products_new(item_id: int, name: str, description: str, price: float):
     global products_sp
     flag = True
@@ -67,6 +67,8 @@ async def products_edit(item_id: int, name: str = None, description: str = None,
             i['description'] = description
             i['price'] = price
             return products_sp
+    else:
+        return 'нет такого товара'
 
 
 
