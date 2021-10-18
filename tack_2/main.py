@@ -21,43 +21,61 @@ async def root():
     return {"message": "Hello World"}
 
 
-@app.get("/api/products")
+@app.get("/api/products")  # +
 async def products():
     global products_sp
     return products_sp
 
 
-@app.get("/api/products/{item_id}")
+@app.get("/api/products/{item_id}")  # +
 async def products_2(item_id: int):
     global products_sp
-    product = products_sp[item_id-1]
-    return product
+    for i in products_sp:
+        if i['item_id'] == item_id:
+            return i
+    else:
+        return 'нет такого товара'
 
 
-@app.post("/api/products/item_id/{item_id}")
+
+@app.post("/api/products/item_id/{item_id}")   # -
 async def products_new(item_id: int, name: str, description: str, price: float):
     global products_sp
-    product = {'item_id': item_id,
-               'name': name,
-               'description': description,
-               'price': price}
-    products_sp.append(product)
-    return product
+    flag = True
+    for i in products_sp:
+        if i["item_id"] == item_id:
+            flag = False
+            print(flag)
+            break
+    if not flag:
+        return 'продукт с таким индексом существует'
+    else:
+        product = {'item_id': item_id,
+                    'name': name,
+                    'description': description,
+                    'price': price}
+        products_sp.append(product)
+        return products_sp
 
 
-@app.put("/api/products/edit/{item_id} ")
+@app.put("/api/products/edit/{item_id}")  # +
 async def products_edit(item_id: int, name: str = None, description: str = None, price: float = None):
     global products_sp
-    products_sp[item_id-1][name] = name
-    products_sp[item_id-1][description] = description
-    products_sp[item_id-1][price] = price
-    return products_sp[item_id-1]
+    for i in products_sp:
+        if i['item_id'] == item_id:
+            i['name'] = name
+            i['description'] = description
+            i['price'] = price
+            return products_sp
 
 
-@app.delete("/api/products/delete/{item_id}")
+
+@app.delete("/api/products/delete/{item_id}")  # +
 async def products_delete(item_id: int):
     global products_sp
-    del products_sp[item_id-1]
+    for i in products_sp:
+        if i['item_id'] == item_id:
+            products_sp.remove(i)
     return products_sp
 
 
